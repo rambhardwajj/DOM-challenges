@@ -1,6 +1,3 @@
-/**
- * Write your challenge solution here
- */
 // Image data
 const images = [
   {
@@ -20,3 +17,85 @@ const images = [
     caption: 'Urban City Skyline',
   },
 ];
+
+const carouselTrack = document.getElementById("carouselTrack");
+const caption = document.getElementById("caption");
+const prevButton = document.getElementById("prevButton");
+const nextButton = document.getElementById("nextButton");
+const carouselNav = document.getElementById("carouselNav");
+const autoPlayButton = document.getElementById("autoPlayButton");
+
+let currInd = 0;
+let autoPlayInterval = null;
+let playing = false;
+
+prevButton.addEventListener('click', () => {
+  currInd = currInd === 0 ? images.length - 1 : currInd - 1;
+  updateCarousel();
+});
+
+nextButton.addEventListener('click', () => {
+  currInd = currInd === images.length - 1 ? 0 : currInd + 1;
+  updateCarousel();
+});
+
+autoPlayButton.addEventListener('click', autoPlayToggle);
+
+function autoPlayToggle(){
+  if(!playing){
+    autoPlayInterval = setInterval(() => {
+      currInd = (currInd + 1) % images.length;
+      updateCarousel();
+    }, 1000); 
+    
+    playing = true;
+    autoPlayButton.innerText = "Stop Autoplay";
+  } else {
+    clearInterval(autoPlayInterval);
+    playing = false;
+    autoPlayButton.innerText = "Start Autoplay";
+  }
+}
+
+function createSlides(){
+  console.log('Created slides');
+  images.forEach((image, ind) => {
+      let carouselSlide = document.createElement("div");
+      carouselSlide.classList.add("carousel-slide");
+      carouselSlide.style.backgroundImage = `url('${image.url}')`;
+      carouselTrack.appendChild(carouselSlide);
+      addIndexIndicator(ind);
+  });
+}
+
+function addIndexIndicator(ind) {
+  console.log('Added indicator on slides');
+  let carouselIndicator = document.createElement('div');
+  carouselIndicator.classList.add('carousel-indicator');
+  carouselIndicator.setAttribute('id', ind);
+
+  carouselIndicator.addEventListener('click', () => {
+    currInd = parseInt(ind);
+    updateCarousel();
+  });
+
+  carouselNav.appendChild(carouselIndicator);
+}
+
+function updateCarousel(){
+  console.log('Updating carousel');
+  carouselTrack.style.transform = `translateX(-${currInd * 100}%)`;
+  caption.textContent = images[currInd].caption;
+
+  document.querySelectorAll('.carousel-indicator').forEach(item => {
+    item.classList.remove('active');
+  });
+
+  let activeIndicator = document.getElementById(currInd.toString());
+  if (activeIndicator) {
+    activeIndicator.classList.add('active');
+  }
+}
+
+createSlides();
+updateCarousel();
