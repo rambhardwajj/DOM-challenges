@@ -1,0 +1,81 @@
+/* General Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #eef2f3;
+    text-align: center;
+    padding: 20px;
+    margin: 0;
+}
+
+/* Container */
+.container {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    display: inline-block;
+    max-width: 450px;
+    width: 90%;
+    transition: transform 0.3s;
+}
+
+.container:hover {
+    transform: scale(1.02);
+}
+
+h1 {
+    color: #2c3e50;
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+/* Input Field */
+input[type="text"] {
+    width: 85%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    outline: none;
+    transition: all 0.3s;
+}
+
+input[type="text"]:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 8px rgba(52, 152, 219, 0.5);
+}
+
+/* Generate Button */
+button {
+    padding: 12px 18px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #3498db, #6dd5fa);
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+button:hover {
+    background: linear-gradient(135deg, #2980b9, #57c1eb);
+    transform: scale(1.05);
+}
+
+/* Dynamic Button Styles */
+#container button {
+    margin: 10px 5px;
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    color: white;
+    transition: all 0.3s;
+    font-weight: bold;
+}
+
+#container button:hover {
+    transform: scale(1.1) rotate(2deg);
+}
