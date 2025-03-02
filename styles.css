@@ -5,98 +5,110 @@
 }
 
 body {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-    Oxygen, Ubuntu, Cantarell, sans-serif;
-  line-height: 1.6;
+  font-family: 'Segoe UI', sans-serif;
   color: white;
   background-color: #0a0a0a;
 }
 
-.main {
-  background: linear-gradient(
-    180deg,
-    rgba(236, 89, 21, 0.1) 0%,
-    transparent 100%
-  );
-  min-height: 100vh;
-  padding: 2rem;
+.navbar {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  gap: 2rem;
+  padding: 1rem 2rem;
+  background: #1a1a1a;
 }
 
-.heading {
-  font-weight: 600;
-  font-size: 60px;
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 1.5rem;
+}
+
+.nav-links li a {
+  text-decoration: none;
+  color: #ffbf86;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.nav-links li a:hover {
+  color: #80c4ff;
+}
+
+.main {
+  text-align: center;
+  padding: 3rem 2rem;
 }
 
 .btns {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 2rem;
 }
 
 .btn-group {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
-
-  margin: 12px;
+  gap: 0.8rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
   border-radius: 12px;
 }
 
-.btns a {
-  text-decoration: none;
-  color: #ffbf86;
-  background: rgba(231, 255, 253, 0.1);
-  padding: 0.8rem 1rem;
-  border-radius: 10px;
-  font-size: 14px;
-  width: 150px;
-  text-align: center;
-  transition: background 0.3s ease;
-}
-
-.btns a:hover {
-  background: rgba(231, 255, 253, 0.2);
-}
-
-.demo-link {
-  font-size: 12px;
-  background: rgba(255, 255, 255, 0.1);
-  color: #80c4ff;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-}
-
-.demo-link:hover {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-
-.moreChallenges {
-  text-align: center;
-  margin-top: 20px;
-}
-
-.moreChallenges a {
-  display: inline-block;
-  padding: 12px 24px;
-  font-size: 1.2em;
-  font-weight: bold;
+.btns a, .moreChallenges a {
   text-decoration: none;
   color: white;
-  background: linear-gradient(135deg, #26415c, #024755);
+  background: #26415c;
+  padding: 14px 20px;
   border-radius: 8px;
+  font-size: 1rem;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
 }
 
-.moreChallenges a:hover {
-  background: linear-gradient(135deg, #0056b3, #1f596d);
-  transform: scale(1.05);
-  box-shadow: 0 6px 12px rgba(0, 91, 191, 0.4);
+.btns a:hover, .moreChallenges a:hover {
+  background: #0056b3;
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px rgba(0, 91, 191, 0.3);
+}
+
+.moreChallenges {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 3rem;
+}
+
+footer {
+  margin-top: 3rem;
+  padding: 1.5rem;
+  text-align: center;
+  background: #1a1a1a;
+  border-top: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+footer p {
+  margin-bottom: 0.8rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+footer a {
+  margin: 0 12px;
+  text-decoration: none;
+  color: #80c4ff;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+}
+
+footer a:hover {
+  color: #ffbf86;
 }
