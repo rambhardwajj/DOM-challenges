@@ -12,7 +12,6 @@ function addToCart( productName, price){
     let existingItem = cart.find((item)=> item.name == productName)
     if(existingItem){
         existingItem.quantity+=1;
-
         updateCart();
     }else{
         cart.push({name: productName, price, quantity : 1})

@@ -10,7 +10,6 @@ const completedTasks = document.getElementById('completedTasks')
 
 const emptyTask = document.querySelector('.empty-list')
 
-
 let total = 0;
 let completed = 0;
 
@@ -52,7 +51,6 @@ addBtn.addEventListener('click', ()=>{
         taskItem.remove();
 
         totalTasks.textContent = `Total tasks: ${total}`;
-
         completedTasks.textContent = `Completed: ${completed}`;
 
         if(total == 0) {
@@ -77,5 +75,4 @@ addBtn.addEventListener('click', ()=>{
     taskInput.value = ''
 
     emptyTask.remove()
-    
 })
