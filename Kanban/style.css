@@ -2,8 +2,9 @@ body {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     display: flex;
     height: 100vh;
-    background-color: white
+    background-color: white;
     margin: 10px;
+    position: relative;
 }
 
 /* .container {
@@ -12,22 +13,34 @@ body {
 
 .boards {
     display: flex;
-    gap: 15px;
-    margin: 8px;
+    gap: 10px;
+    margin: 5px;
+    margin-top: 10px;
 }
 
 .board {
-    width: 350px;
-    height: 80vh;
-    background-color: #f4f4f4;;
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid #cfcfcf;;
-    padding: 10px;;
-    /* box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); */
+    width: 350px; 
+    min-height: 80vh; 
+    background-color: #e7e7e7c7; 
+    padding: 15px;
+    border-radius: 5px; 
+    border: 1px solid #bbbaba; 
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
     font-weight: bold;
+    overflow-y: auto; 
+    transition: transform 0.3s ease, box-shadow 0.3s ease; 
+}
+
+.board:hover {
+    transform: translateY(-5px); 
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2); 
+}
+
+.create-new-btns{
+    display: flex;
+    justify-content: space-between;
 }
 
 .task {
@@ -40,13 +53,26 @@ body {
     box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
 }
 
+#task-title-div{
+    margin-top: 5px;
+    margin-right: 5px;
+}
+#task-desc-div{
+    margin-top: 10px;
+    margin-left: 1px;
+    font-weight: lighter;
+    font-size: 10px;
+    max-width: 70%;
+}
+
 .addBtn {
-    margin-top: 20px;
-    padding: 10px 20px;
+    margin: 10px;
+    padding: 10px 15px;
     border: none;
-    background-color: #007BFF;
+    background-color: #365866;
     color: white;
     cursor: pointer;
+    font-weight: bold;
     border-radius: 5px;
 }
 
@@ -59,17 +85,17 @@ body {
 #todo-circle{
     border-radius: 50%;
     width: 15px;
-    border: 3px solid red
+    border: 3px solid rgb(30, 216, 46)
 }
 #inprog-circle{
     border-radius: 50%;
     width: 15px;
-    border: 3px solid rgb(134, 134, 250)
+    border: 3px solid rgb(119, 119, 253)
 }
 #done-circle{
     border-radius: 50%;
     width: 15px;
-    border: 3px solid rgb(104, 170, 5)
+    border: 3px solid rgb(214, 6, 6)
 }
 .count{
     border-radius: 50%;
@@ -83,4 +109,148 @@ body {
     padding: 5px;
     border: 2px dashed grey;
     margin-bottom: 10px;
+}
+
+
+
+.prompt {
+    display: none;
+    width: 250px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    font-family: Arial, sans-serif;
+    position: absolute;
+    top: 15%;
+    left: 40%;
+    z-index:1000;
+}
+.prompt.active {
+    display: block; /* Show the prompt when active */
+}
+
+.prompt div {
+    font-size: 14px;
+    color: #242323;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.prompt-btns{
+    display: flex;
+    justify-content: end;
+    gap: 10px;
+    width: 95%;
+}
+
+/* General Button Styling */
+.p-btns {
+    padding: 5px 10px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#cancel {
+    background-color: #cacaca; /* Red color */
+    color: black;
+    border: 1px solid grey;
+}
+
+#cancel:hover {
+    background-color: #d3584b; /* Slightly darker red on hover */
+}
+
+#Submit {
+    background-color: #1b8346; /* Green color */
+    color: white;
+}
+
+#Submit:hover {
+    background-color: #27ae60; /* Slightly darker green on hover */
+}
+
+
+.prompt input[type="text"] {
+    width: 90%;
+    padding: 6px;
+    margin-bottom: 15px;
+    border: 1px solid #bdbaba;
+    border-radius: 5px;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.prompt input[type="text"]:focus {
+    border-color: #2a89e2;
+}
+
+.prompt input[type="text"]::placeholder {
+    color: #aaa;
+}
+
+.prompt input[type="text"]:focus::placeholder {
+    color: #5b9bd5;
+}
+.radio-btns {
+    display: flex;
+    gap: 15px; 
+    align-items: center; 
+    padding: 8px 0;
+}
+
+.radio-btns input[type="radio"] {
+    appearance: none; 
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    /* background-color: #fff; */
+    position: relative;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+#high-priorityBtn{
+    border: 4px solid #ff0000
+}
+#med-priorityBtn{
+    border: 3.3px solid #677ae6
+}
+#low-priorityBtn{
+    border: 2.5px solid #3bf799
+}
+
+.radio-btns input[type="radio"]:checked {
+    background-color: #007bff;
+    border-color: #0056b3;
+}
+
+
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4); 
+    backdrop-filter: blur(5px); 
+    z-index: 999; 
+}
+
+.overlay.active {
+    display: block;
+}
+
+.space-task {
+   display: none;
+   width: 90%;
+   background-color: black;
+}
+.space-task:active{
+    display: block;
 }

@@ -6,19 +6,21 @@
     <title>Kanban Board</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body >
+    
     <div class="container">
         <div class="boards">
-            <div class="board" >
+            <div class="board" id="to-do">
                 <div class="top-bar"> 
                     <div class="circle" id="todo-circle" ></div>
                     <div>To Do </div>
                     <div class="count"> 0</div>
                 </div>
-                <div class="task">
-                    <div class="task-top"></div>
-                    <div> Task</div>
-                </div>
+                
+                <!-- <div class="task">
+                    <div id="task-title-div"> Task <span>🟢</span> </div>
+                    <div id="task-desc-div"> Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos, delectus!</div>
+                </div> -->
             </div>
             <div class="board" id="in-progress">
                 <div class="top-bar"> 
@@ -26,6 +28,7 @@
                     <div>In Progress </div>
                     <div class="count"> 0</div>
                 </div>
+                
             </div>
             <div class="board" id="done">
                 <div class="top-bar"> 
@@ -35,7 +38,35 @@
                 </div>
             </div>
         </div>
-        <button class="addBtn">Create Task</button>
+        <div class="create-new-btns">
+            <button id="add-task-btn" class="addBtn">Create Task</button>
+            <button id="add-board-btn" class="addBtn">New Board</button>
+        </div>
+    </div>
+    <div></div>
+    <div class="overlay"></div>
+    <div class="prompt ">
+        <div>Title</div>
+        <input id="prompt-title" type="text" >
+        <div>Name</div>
+        <input id="prompt-name" type="text" >
+
+
+        <div>Priority</div>
+        <div class="radio-btns">
+            <input id="low-priorityBtn" type="radio" name="priority" onclick="toggleRadio('low')">
+            <input id="med-priorityBtn" type="radio" name="priority" onclick="toggleRadio('med')">
+            <input id="high-priorityBtn" type="radio" name="priority" onclick="toggleRadio('high')">            
+        </div>
+
+        <div>Description</div>
+        <input id="prompt-desc" type="text" >
+        
+
+        <div class="prompt-btns">
+            <button class="p-btns" id="cancel" onclick="cancelBtn()"> Cancel </button>
+            <button class="p-btns" id="Submit"> Submit</button>
+        </div>
     </div>
 
     <script src="index.js"></script>
