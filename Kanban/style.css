@@ -52,10 +52,16 @@ body {
     width: 90%;
     box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
 }
+span{
+    position: absolute;
+    right: 0px;
+    font-size: 15px;
+}
 
 #task-title-div{
     margin-top: 5px;
     margin-right: 5px;
+    position: relative;
 }
 #task-desc-div{
     margin-top: 10px;
