@@ -7,35 +7,46 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body >
-    
+    <nav>
+        <div class="nav-logo">Task Manager</div>
+        <div class="nav-links">
+          <a href="#">Home</a>
+          <a href="#">Boards</a>
+          <a href="https://github.com/rambhardwajj/DOM-challenges/tree/main/Kanban" target="_blank">Source Code</a>
+        </div>
+    </nav>
+    <img  id="delTop" src="./image.png"  alt="">
     <div class="container">
         <div class="boards">
             <div class="board" id="to-do">
                 <div class="top-bar"> 
                     <div class="circle" id="todo-circle" ></div>
                     <div>To Do </div>
-                    <div class="count"> 0</div>
+                    <div id="todo-count" class="count"> 0</div>
                 </div>
                 
                 <!-- <div class="task">
                     <div id="task-title-div"> Task <span>🟢</span> </div>
                     <div id="task-desc-div"> Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos, delectus!</div>
                 </div> -->
+                <!-- todo board ko del krke dikkat ho rhi hai -->
+                <!-- <i class="delete-board-icon">🗑️</i> -->  
             </div>
             <div class="board" id="in-progress">
                 <div class="top-bar"> 
                     <div class="circle" id="inprog-circle"></div>
                     <div>In Progress </div>
-                    <div class="count"> 0</div>
+                    <div id="in-prog-count" class="count"> 0</div>
                 </div>
-                
+                <i class="delete-board-icon">🗑️</i>
             </div>
             <div class="board" id="done">
                 <div class="top-bar"> 
                     <div class="circle" id="done-circle" ></div>
                     <div>Done </div>
-                    <div class="count"> 0</div>
+                    <div id="done-count" class="count"> 0</div>
                 </div>
+                <i class="delete-board-icon" >🗑️</i>
             </div>
         </div>
         <div class="create-new-btns">
@@ -64,6 +75,18 @@
         </div>
     </div>
 
+    <div class="board-prompt">
+        <div>Board Name</div>
+        <input id="board-name" type="text">
+    
+        <div>Ring Color</div>
+        <input id="ring-color" type="color">
+    
+        <div class="prompt-btns">
+            <button class="p-btns" id="cancel-board" onclick="cancelBoardPrompt()"> Cancel </button>
+            <button class="p-btns" id="submit-board"> Create Board </button>
+        </div>
+    </div>
     <script src="index.js"></script>
 </body>
 </html>
