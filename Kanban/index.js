@@ -21,7 +21,10 @@ let buttonPriorityIcon  = '🟢';
 let todoBoardCount = 0;
 let editingTask = null; 
 
-// document.addEventListener("DOMContentLoaded", loadFromLocalStorage); 
+// document.addEventListener("DOMContentLoaded", () => {
+//     loadBoardsFromLocal();
+//     loadTasksFromLocal();
+// });
 
 createTaskBtn.addEventListener('click', ()=>{
     prompt.classList.add('active');
@@ -63,6 +66,10 @@ submitBoardBtn.addEventListener('click', ()=>{
     newBoard.appendChild(newTopBar)
     newBoard.appendChild(newDelBtn)
     boardContainer.appendChild(newBoard)
+
+    allBoards = document.querySelectorAll('.board')     
+    attachDragOver()
+    // saveBoardsToLocal();
     cancelBoardPrompt()
     updateTaskCount()
 })
@@ -125,10 +132,12 @@ submitBtn.addEventListener('click', ()=>{
         todoBoard.appendChild(taskDiv)
         updateTaskCount()
     }
+    // saveTasksToLocal();
+    updateTaskCount()
     cancelBtn()
 })
 
-const allBoards = document.querySelectorAll('.board')     
+let allBoards = document.querySelectorAll('.board')     
 // Attaching drag and edit listener to task cards
 const allTasks  = document.querySelectorAll('.task')
 allTasks.forEach((item)=> attachDrag(item))
@@ -203,15 +212,18 @@ function attachDrag(taskDiv){
     })
 }
 // Dragged card catching functionality 
-allBoards.forEach((board)=>{
-    board.addEventListener('dragover', (event)=>{
-        event.preventDefault();
-        const flyingEl = document.querySelector('.flying')
-        if (!flyingEl) return;
-       
-        board.appendChild(flyingEl)
-    });
-})
+function attachDragOver(){
+    allBoards.forEach((board)=>{
+        board.addEventListener('dragover', (event)=>{
+            event.preventDefault();
+            const flyingEl = document.querySelector('.flying')
+            if (!flyingEl) return;
+           
+            board.appendChild(flyingEl)
+        });
+    })
+}
+attachDragOver()
 // update todo boardcount 
 // function updateTodocount(count){
 //     let todoCount = todoBoard.querySelector('#todo-count')
@@ -254,3 +266,106 @@ function updateTaskCount() {
     });
 }
 updateTaskCount()
+
+
+// function saveBoardsToLocal(){
+//     let boards = [];
+//     document.querySelectorAll('.board').forEach((board)=>{
+//         let boardTitle  = board.querySelector('.top-bar div:nth-child(2)').innerText;
+//         console.log(boardTitle)
+//         let  boardColor = board.querySelector('.circle').style.borderColor;
+//         let boardCount =  board.querySelector('.count').innerText ;
+//         boards.push({
+//             title:  boardTitle, 
+//             color: boardColor,
+//             count: boardCount
+//         })
+//     })
+//     localStorage.setItem('boards', JSON.stringify(boards))
+// }
+
+// function saveTasksToLocal(){
+//     let tasks = [];
+//     document.querySelectorAll('.task').forEach((task)=>{
+//         let taskTitle= task.querySelector('#task-title-div').innerText.trim();
+//         let taskDesc =  task.querySelector('#task-desc-div' ).innerText.trim();
+//         let taskTime  = task.querySelector( '.time-date').innerText;
+
+//         tasks.push( {
+//             title: taskTitle, 
+//             description: taskDesc,
+//             time: taskTime,
+//         }) 
+//     } )
+//     localStorage.setItem('tasks', JSON.stringify(tasks));
+// }
+
+// function loadBoardsFromLocal(){
+//     let boards = JSON.parse(localStorage.getItem('boards')) || [];
+//     boards.forEach((board)=>{
+//         let newBoard = document.createElement('div');
+//         newBoard.classList.add('board')
+
+//         let newTopBar = document.createElement("div");
+//         newTopBar.classList.add("top-bar");
+
+//         let newCircle = document.createElement("div");
+//         newCircle.classList.add("circle");
+//         newCircle.style.border = `3px solid ${board.color}`;
+
+//         let newBoardTitle = document.createElement("div");
+//         newBoardTitle.innerText = board.title;
+
+//         let newBoardCount = document.createElement("div");
+//         newBoardCount.innerText = board.count;
+//         newBoardCount.classList.add("count");
+
+//         let newDelBtn = document.createElement("i");
+//         newDelBtn.innerText = "🗑️";
+//         newDelBtn.classList.add("delete-board-icon");
+
+//         attachDelFunctionality(newDelBtn)
+
+//         newTopBar.appendChild(newCircle);
+//         newTopBar.appendChild(newBoardTitle);
+//         newTopBar.appendChild(newBoardCount);
+
+//         newBoard.appendChild(newTopBar);
+//         newBoard.appendChild(newDelBtn);
+//         boardContainer.appendChild(newBoard);
+//     })
+// }
+
+// function loadTasksFromLocal(){
+//     let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+//     tasks.forEach((task)=>{
+//         const taskDiv = document.createElement('div');
+//         taskDiv.classList.add('task')
+
+//         const taskPriorityDiv = document.createElement("span");
+//         taskPriorityDiv.innerText = "🟢"; // Default priority icon
+
+//         const taskTitleDiv = document.createElement("div");
+//         taskTitleDiv.innerText = task.title;
+//         taskTitleDiv.id = "task-title-div";
+//         taskTitleDiv.appendChild(taskPriorityDiv);
+
+//         const taskDescDiv = document.createElement("div");
+//         taskDescDiv.innerText = task.description;
+//         taskDescDiv.id = "task-desc-div";
+
+//         const timeDate = document.createElement("div");
+//         timeDate.innerText = task.time;
+//         timeDate.classList.add("time-date");
+
+//         taskDiv.appendChild(taskTitleDiv);
+//         taskDiv.appendChild(taskDescDiv);
+//         taskDiv.appendChild(timeDate);
+//         taskDiv.draggable = true;
+
+//         attachDrag(taskDiv);
+//         addEditOption(taskDiv);
+
+//         todoBoard.appendChild(taskDiv);
+//     } )
+// }
