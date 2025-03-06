@@ -21,6 +21,8 @@ let buttonPriorityIcon  = '🟢';
 let todoBoardCount = 0;
 let editingTask = null; 
 
+// document.addEventListener("DOMContentLoaded", loadFromLocalStorage); 
+
 createTaskBtn.addEventListener('click', ()=>{
     prompt.classList.add('active');
     overLay.classList.add('active')
