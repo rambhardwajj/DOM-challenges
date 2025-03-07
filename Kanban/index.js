@@ -21,10 +21,15 @@ let buttonPriorityIcon  = '🟢';
 let todoBoardCount = 0;
 let editingTask = null; 
 
-// document.addEventListener("DOMContentLoaded", () => {
-//     loadBoardsFromLocal();
-//     loadTasksFromLocal();
-// });
+let myBoards = []
+let myTasks = []
+
+document.addEventListener("DOMContentLoaded", () => {
+    // isme local Storage mai render wali cheeze krni hai
+    renderBoardFromLocal()
+    renderTaskFromLocal()
+
+});
 
 createTaskBtn.addEventListener('click', ()=>{
     prompt.classList.add('active');
@@ -65,13 +70,15 @@ submitBoardBtn.addEventListener('click', ()=>{
 
     newBoard.appendChild(newTopBar)
     newBoard.appendChild(newDelBtn)
+
+    newBoard.id = Date.now()
     boardContainer.appendChild(newBoard)
 
     allBoards = document.querySelectorAll('.board')     
     attachDragOver()
-    // saveBoardsToLocal();
     cancelBoardPrompt()
     updateTaskCount()
+    addBoardtoLocal()
 })
 submitBtn.addEventListener('click', ()=>{
     const currPromptTitle = promptTitle.value;       // console.log(currPromptTitle)
@@ -118,13 +125,17 @@ submitBtn.addEventListener('click', ()=>{
         const timeDate = document.createElement('div')
         timeDate.innerText = new Date().toLocaleString(); 
         timeDate.classList.add('time-date')
-        console.log(timeDate)
+        // console.log(timeDate)
     
         // task div mai add kro
         taskDiv.appendChild(taskTitleDiv)
         taskDiv.appendChild(taskDescDiv)
         taskDiv.appendChild(timeDate)
         taskDiv.draggable = true;
+
+        taskDiv.id = Date.now()
+        taskDiv.setAttribute('parId',todoBoard.id)
+        console.log(taskDiv.getAttribute('parId'))
     
         attachDrag(taskDiv)
         addEditOption(taskDiv)
@@ -135,6 +146,7 @@ submitBtn.addEventListener('click', ()=>{
     // saveTasksToLocal();
     updateTaskCount()
     cancelBtn()
+    addTasktoLocal()
 })
 
 let allBoards = document.querySelectorAll('.board')     
@@ -199,6 +211,7 @@ function attachDelFunctionality(delBtn){
 
 // drag functionality
 function attachDrag(taskDiv){
+    console.log("task yaahan aaya hai")
     taskDiv.addEventListener('dragstart', () => {
         taskDiv.classList.add('flying')
         taskDiv.classList.add("dragging");
@@ -208,7 +221,13 @@ function attachDrag(taskDiv){
         taskDiv.classList.remove('flying')
         delTopBtn.classList.remove('active')
         taskDiv.classList.remove("dragging");
+        if(taskDiv.parentNode!=null){
+            taskDiv.setAttribute('parId', taskDiv.parentNode.id)
+            taskDiv.parId = taskDiv.parentNode.id;
+        }
+        console.log(taskDiv.parId, ' in dragend')
         updateTaskCount()
+        addTasktoLocal()
     })
 }
 // Dragged card catching functionality 
@@ -218,7 +237,7 @@ function attachDragOver(){
             event.preventDefault();
             const flyingEl = document.querySelector('.flying')
             if (!flyingEl) return;
-           
+            
             board.appendChild(flyingEl)
         });
     })
@@ -233,8 +252,10 @@ attachDragOver()
 deleteBoardIcons.forEach((currIcon)=>{
     currIcon.addEventListener('click', ()=>{
         let parDiv = currIcon.parentNode
-        if(confirm('Are you sure you want to delete the board'))
+        if(confirm('Are you sure you want to delete the board')){
             parDiv.remove()
+            addBoardtoLocal();
+        }
         else{
             console.log('not deleted')
         }
@@ -253,6 +274,8 @@ delTopBtn.addEventListener("drop", (event) => {
         if(confirm('Are you sure you want to delete this task')){
             currCard.remove();
             // console.log("Card removed:", currCard); debugging
+            addTasktoLocal(); 
+            updateTaskCount();
         }
     }
 });
@@ -267,105 +290,164 @@ function updateTaskCount() {
 }
 updateTaskCount()
 
+// local Storage thingy 
+// Save Boards to local Storage,
+// Save Tasks to local Storage
 
-// function saveBoardsToLocal(){
-//     let boards = [];
-//     document.querySelectorAll('.board').forEach((board)=>{
-//         let boardTitle  = board.querySelector('.top-bar div:nth-child(2)').innerText;
-//         console.log(boardTitle)
-//         let  boardColor = board.querySelector('.circle').style.borderColor;
-//         let boardCount =  board.querySelector('.count').innerText ;
-//         boards.push({
-//             title:  boardTitle, 
-//             color: boardColor,
-//             count: boardCount
-//         })
-//     })
-//     localStorage.setItem('boards', JSON.stringify(boards))
-// }
+// - Adding ids to the boards that are created dynamically  and that are default
+// - adding  ids to  the task that are  created dynamically 
+// - Adding ids of board to those task
+// - storing  the boards on local  storage, 
+// - storing tasks  to the local storage. 
+// - when the page is   loaded check the container 
+//     - Render the boards - if the boards with the ids are not present append those board with the container 
+//     - Render t he tasks - render the task to the specific board
 
-// function saveTasksToLocal(){
-//     let tasks = [];
-//     document.querySelectorAll('.task').forEach((task)=>{
-//         let taskTitle= task.querySelector('#task-title-div').innerText.trim();
-//         let taskDesc =  task.querySelector('#task-desc-div' ).innerText.trim();
-//         let taskTime  = task.querySelector( '.time-date').innerText;
 
-//         tasks.push( {
-//             title: taskTitle, 
-//             description: taskDesc,
-//             time: taskTime,
-//         }) 
-//     } )
-//     localStorage.setItem('tasks', JSON.stringify(tasks));
-// }
 
-// function loadBoardsFromLocal(){
-//     let boards = JSON.parse(localStorage.getItem('boards')) || [];
-//     boards.forEach((board)=>{
-//         let newBoard = document.createElement('div');
-//         newBoard.classList.add('board')
+// saare task to traverse kro and har ek task ka obj banake taskLocal mai push krdo
+function addTasktoLocal(){
+    let tasksLocal = []
+    document.querySelectorAll('.task').forEach((currTask)=>{
+        console.log("sfsf" ,currTask)
+        let taskId = currTask.getAttribute('id'); 
+        let parentId = currTask.getAttribute('parId');
+        console.log(parentId, "sdf")
+        let taskTitle = currTask.querySelector('#task-title-div').innerText.trim();
+        let taskDesc = currTask.querySelector('#task-desc-div').innerText.trim();
+        let taskTime = currTask.querySelector('.time-date').innerText;
+        let taskPriority = currTask.querySelector('#task-title-div span').innerText; 
 
-//         let newTopBar = document.createElement("div");
-//         newTopBar.classList.add("top-bar");
 
-//         let newCircle = document.createElement("div");
-//         newCircle.classList.add("circle");
-//         newCircle.style.border = `3px solid ${board.color}`;
+        tasksLocal.push({
+            id: taskId, 
+            parentId: parentId, 
+            title: taskTitle, 
+            description: taskDesc, 
+            time: taskTime, 
+            priority: taskPriority 
+        })
+    })
+    localStorage.setItem('localTasks',  JSON.stringify(tasksLocal))
+}
 
-//         let newBoardTitle = document.createElement("div");
-//         newBoardTitle.innerText = board.title;
+function renderTaskFromLocal(){
+    let taskData = JSON.parse(localStorage.getItem('localTasks')) ||  []
+    console.log(taskData)
+    taskData.forEach((task)=>{
+        console.log(task)
+        let taskEl = createMyTask(task);
+        let boardId = task.parentId;
+        let boardElement = document.getElementById(boardId)
+        console.log(boardElement)
+        if(boardElement)
+            boardElement.appendChild(taskEl)
+    })
+}
+function createMyTask(taskObj){
+    // task Obj ke sare key se el banao
+    let newTask = document.createElement('div');
+    newTask.classList.add('task');
+    newTask.id = taskObj.id;
+    newTask.setAttribute('parId', taskObj.parentId);
 
-//         let newBoardCount = document.createElement("div");
-//         newBoardCount.innerText = board.count;
-//         newBoardCount.classList.add("count");
+    let newTaskTitle = document.createElement('div')
+    newTaskTitle.innerText = taskObj.title.slice(0,-2)
+    newTaskTitle.id = 'task-title-div'
 
-//         let newDelBtn = document.createElement("i");
-//         newDelBtn.innerText = "🗑️";
-//         newDelBtn.classList.add("delete-board-icon");
+    let taskPriorityDiv = document.createElement("span");
+    taskPriorityDiv.innerText = taskObj.priority.trim();
+    newTaskTitle.appendChild(taskPriorityDiv);
 
-//         attachDelFunctionality(newDelBtn)
+    let newTaskDesc = document.createElement('div');
+    newTaskDesc.innerText = taskObj.description;
+    newTaskDesc.id = 'task-desc-div';
 
-//         newTopBar.appendChild(newCircle);
-//         newTopBar.appendChild(newBoardTitle);
-//         newTopBar.appendChild(newBoardCount);
+    let timeDate = document.createElement("div");
+    timeDate.innerText = taskObj.time;
+    timeDate.classList.add("time-date");
 
-//         newBoard.appendChild(newTopBar);
-//         newBoard.appendChild(newDelBtn);
-//         boardContainer.appendChild(newBoard);
-//     })
-// }
+    newTask.appendChild(newTaskTitle);
+    newTask.appendChild(newTaskDesc);
+    newTask.appendChild(timeDate);
+    
+    newTask.draggable = true;
 
-// function loadTasksFromLocal(){
-//     let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-//     tasks.forEach((task)=>{
-//         const taskDiv = document.createElement('div');
-//         taskDiv.classList.add('task')
+    attachDrag(newTask);
+    addEditOption(newTask);
 
-//         const taskPriorityDiv = document.createElement("span");
-//         taskPriorityDiv.innerText = "🟢"; // Default priority icon
+    return newTask;
+}
 
-//         const taskTitleDiv = document.createElement("div");
-//         taskTitleDiv.innerText = task.title;
-//         taskTitleDiv.id = "task-title-div";
-//         taskTitleDiv.appendChild(taskPriorityDiv);
+function addBoardtoLocal(){
+    let boardsLocal = [];
+    document.querySelectorAll('.board').forEach((currBoard) => {
+        let boardId = currBoard.getAttribute('id');
+        let boardTitle = currBoard.querySelector('.top-bar div:nth-child(2)').innerText 
+        let boardColor = currBoard.querySelector('.circle').style.borderColor;
+        let boardCount = currBoard.querySelector('.count').innerText.trim();
+        
+        boardsLocal.push({
+            id: boardId, 
+            title: boardTitle, 
+            color: boardColor, 
+            count: boardCount
+        })
+    })
+    localStorage.setItem('localBoards', JSON.stringify(boardsLocal) )
+}
 
-//         const taskDescDiv = document.createElement("div");
-//         taskDescDiv.innerText = task.description;
-//         taskDescDiv.id = "task-desc-div";
+function renderBoardFromLocal(){
+    let boardData = JSON.parse(localStorage.getItem('localBoards')) || []
+    
+    boardData.forEach((board)=> {
+        // console.log(board)
+        if( document.getElementById(board.id)) return;
+        if( board.id == 'to-do' || board.id == 'in-progress' || board.id == 'done'){
+            return ;
+        }
+        let boardEl = createMyBoard(board)
+        document.querySelector('.boards').appendChild(boardEl)
+    })
+}
+function createMyBoard(boardObj){
+    // board data obj mai se saare key waalo ke liye unka element banao
+    let newBoard = document.createElement('div'); 
+    newBoard.classList.add('board')
+    newBoard.id = boardObj.id;
 
-//         const timeDate = document.createElement("div");
-//         timeDate.innerText = task.time;
-//         timeDate.classList.add("time-date");
+    let newTopBar = document.createElement('div')
+    newTopBar.classList.add('top-bar')
 
-//         taskDiv.appendChild(taskTitleDiv);
-//         taskDiv.appendChild(taskDescDiv);
-//         taskDiv.appendChild(timeDate);
-//         taskDiv.draggable = true;
+    let newCircle = document.createElement('div')
+    newCircle.classList.add('circle')
+    newCircle.style.border = `3px solid ${boardObj.color}`
+    
+    let newBoardTitle = document.createElement('div');
+    newBoardTitle.innerText =boardObj.title;
 
-//         attachDrag(taskDiv);
-//         addEditOption(taskDiv);
+    let newBoardCount = document.createElement('div')
+    newBoardCount.innerText = boardObj.count;
 
-//         todoBoard.appendChild(taskDiv);
-//     } )
-// }
+    let newDelBtn = document.createElement('i');
+    newDelBtn.innerText = '🗑️';
+    newDelBtn.classList.add('delete-board-icon')
+
+    newDelBtn.addEventListener('click', ()=>{
+        if( confirm('Are you sure you need to delete this board')){
+            newBoard.remove();
+            addBoardtoLocal(); 
+        }
+    })
+
+    newTopBar.appendChild(newCircle); 
+    newTopBar.appendChild(newBoardTitle); 
+    newTopBar.appendChild(newBoardCount)
+
+    newBoard.append(newTopBar); newBoard.append(newDelBtn);
+    updateTaskCount()
+    attachDragOver()
+
+
+    return newBoard;
+}
