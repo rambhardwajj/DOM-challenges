@@ -90,7 +90,8 @@ submitBtn.addEventListener('click', ()=>{
     }
 
     if( editingTask){
-        console.log('editing')
+        // console.log('editing')
+
         let titleDiv = editingTask.querySelector('#task-title-div');
         let descDiv = editingTask.querySelector('#task-desc-div');
 
@@ -135,7 +136,7 @@ submitBtn.addEventListener('click', ()=>{
 
         taskDiv.id = Date.now()
         taskDiv.setAttribute('parId',todoBoard.id)
-        console.log(taskDiv.getAttribute('parId'))
+        // console.log(taskDiv.getAttribute('parId'))
     
         attachDrag(taskDiv)
         addEditOption(taskDiv)
@@ -161,7 +162,7 @@ function addEditOption(taskDiv){
 }
 // update prompt listener
 function updateTask(taskDiv){
-    console.log(taskDiv)
+    // console.log(taskDiv)
     editingTask = taskDiv;
     
     let currDesc = taskDiv.querySelector('#task-desc-div');
@@ -211,7 +212,7 @@ function attachDelFunctionality(delBtn){
 
 // drag functionality
 function attachDrag(taskDiv){
-    console.log("task yaahan aaya hai")
+    // console.log("task attach drag maiaaya hai-", taskDiv.parentNode)
     taskDiv.addEventListener('dragstart', () => {
         taskDiv.classList.add('flying')
         taskDiv.classList.add("dragging");
@@ -225,7 +226,7 @@ function attachDrag(taskDiv){
             taskDiv.setAttribute('parId', taskDiv.parentNode.id)
             taskDiv.parId = taskDiv.parentNode.id;
         }
-        console.log(taskDiv.parId, ' in dragend')
+        // console.log(taskDiv.parId, ' in dragend')
         updateTaskCount()
         addTasktoLocal()
     })
@@ -233,6 +234,7 @@ function attachDrag(taskDiv){
 // Dragged card catching functionality 
 function attachDragOver(){
     allBoards.forEach((board)=>{
+        // console.log('attachdragover -', board.title)
         board.addEventListener('dragover', (event)=>{
             event.preventDefault();
             const flyingEl = document.querySelector('.flying')
@@ -265,7 +267,7 @@ deleteBoardIcons.forEach((currIcon)=>{
 delTopBtn.addEventListener('dragover', ()=>{
     event.preventDefault();
     const currCard = document.querySelector('.task')
-    console.log(currCard)
+    // console.log(currCard)
 })
 delTopBtn.addEventListener("drop", (event) => {
     event.preventDefault(); 
@@ -309,10 +311,10 @@ updateTaskCount()
 function addTasktoLocal(){
     let tasksLocal = []
     document.querySelectorAll('.task').forEach((currTask)=>{
-        console.log("sfsf" ,currTask)
+        // console.log("sfsf" ,currTask)
         let taskId = currTask.getAttribute('id'); 
         let parentId = currTask.getAttribute('parId');
-        console.log(parentId, "sdf")
+        // console.log(parentId, "sdf")
         let taskTitle = currTask.querySelector('#task-title-div').innerText.trim();
         let taskDesc = currTask.querySelector('#task-desc-div').innerText.trim();
         let taskTime = currTask.querySelector('.time-date').innerText;
@@ -333,13 +335,16 @@ function addTasktoLocal(){
 
 function renderTaskFromLocal(){
     let taskData = JSON.parse(localStorage.getItem('localTasks')) ||  []
-    console.log(taskData)
+    // console.log(taskData)
     taskData.forEach((task)=>{
-        console.log(task)
         let taskEl = createMyTask(task);
+        let currBr = taskEl.querySelectorAll('br')
+        if(currBr){
+            // console.log('bug fix kr diya ')
+            currBr.forEach((x)=> x.remove())
+        }
         let boardId = task.parentId;
         let boardElement = document.getElementById(boardId)
-        console.log(boardElement)
         if(boardElement)
             boardElement.appendChild(taskEl)
     })
@@ -356,8 +361,8 @@ function createMyTask(taskObj){
     newTaskTitle.id = 'task-title-div'
 
     let taskPriorityDiv = document.createElement("span");
-    taskPriorityDiv.innerText = taskObj.priority.trim();
-    newTaskTitle.appendChild(taskPriorityDiv);
+    taskPriorityDiv.innerText = taskObj.priority.trim(); 
+    newTaskTitle.appendChild(taskPriorityDiv, " PRIO ");
 
     let newTaskDesc = document.createElement('div');
     newTaskDesc.innerText = taskObj.description;
@@ -376,6 +381,7 @@ function createMyTask(taskObj){
     attachDrag(newTask);
     addEditOption(newTask);
 
+
     return newTask;
 }
 
@@ -386,6 +392,7 @@ function addBoardtoLocal(){
         let boardTitle = currBoard.querySelector('.top-bar div:nth-child(2)').innerText 
         let boardColor = currBoard.querySelector('.circle').style.borderColor;
         let boardCount = currBoard.querySelector('.count').innerText.trim();
+        console.log(boardCount)
         
         boardsLocal.push({
             id: boardId, 
@@ -401,8 +408,9 @@ function renderBoardFromLocal(){
     let boardData = JSON.parse(localStorage.getItem('localBoards')) || []
     
     boardData.forEach((board)=> {
-        // console.log(board)
         if( document.getElementById(board.id)) return;
+        // console.log(board)
+
         if( board.id == 'to-do' || board.id == 'in-progress' || board.id == 'done'){
             return ;
         }
@@ -445,8 +453,14 @@ function createMyBoard(boardObj){
     newTopBar.appendChild(newBoardCount)
 
     newBoard.append(newTopBar); newBoard.append(newDelBtn);
-    updateTaskCount()
-    attachDragOver()
+    newBoard.addEventListener('dragover', (event)=>{
+        event.preventDefault();
+        const flyingEl = document.querySelector('.flying')
+        if (!flyingEl) return;
+        
+        newBoard.appendChild(flyingEl)
+    });
+    // attachDragOver()
 
 
     return newBoard;
